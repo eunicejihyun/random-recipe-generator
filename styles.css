@@ -1,0 +1,49 @@
+#mealPhoto {
+    border-radius: 100%;
+    text-align: center;
+    margin: auto;
+    width: 60%;
+    max-width: 200px;
+}
+
+.left {
+    padding: 50px 0;
+    text-align: center;
+}
+
+#mealName, #video {
+    margin: 40px 0;
+}
+
+#getIdea {
+    bottom: 0;
+    left: 0;
+}
+
+body {
+    padding: 0 40px 50px;
+}
+
+h4 {
+    padding: 50px 0 20px;
+}
+
+button {
+    background-color: maroon;
+    border-radius: 50px;
+    color: white;
+    border-radius: 15px;
+    padding: 0 15px;
+    border: 0; 
+    margin: 0 20px;
+}
+
+button:hover {
+    background-color: lightcoral;
+    color: black;
+}
+
+footer {
+    text-align: center;
+    padding-top: 50px;
+}
