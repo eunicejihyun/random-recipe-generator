@@ -42,7 +42,7 @@ var ingredientsList = document.getElementById("ingredientsList");
 var instructions = document.getElementById("instructions");
 var source = document.getElementById("source");
 var video = document.getElementById("video");
-// Defining async function
+// Get API data and update webpage
 function getDinnerIdea() {
     return __awaiter(this, void 0, void 0, function () {
         var response, data;
@@ -65,11 +65,13 @@ function updateWebpage(data) {
     mealName.textContent = data["strMeal"];
     mealPhoto.src = data["strMealThumb"];
     instructions.textContent = data["strInstructions"];
+    source.setAttribute("href", data["strSource"]);
+    // update list of ingredients
     ingredientsList.innerHTML = "";
     for (var i = 1; i < 21; i++) {
         var ingredient = data["strIngredient".concat(i)];
         var measurement = data["strMeasure".concat(i)];
-        if (ingredient.trim() !== "") {
+        if (ingredient === null || ingredient !== "") {
             var newIngredient = document.createElement("p");
             newIngredient.setAttribute("class", "ingredient col-sm-6 col-xl-4");
             var newIngredientText = document.createTextNode(" ".concat(measurement, " ").concat(ingredient));
@@ -80,7 +82,7 @@ function updateWebpage(data) {
             ingredientsList.appendChild(newIngredient);
         }
     }
-    source.setAttribute("href", data["strSource"]);
+    // if there's a video, then update the link - otherwise, remove the video from display
     if (data["strYoutube"].trim !== "") {
         var videoID = data["strYoutube"].substring(data["strYoutube"].indexOf("v=") + 2);
         video.src = "https://www.youtube.com/embed/" + videoID;
@@ -89,9 +91,12 @@ function updateWebpage(data) {
         video.style.display = "none";
     }
 }
+// need to create a function wrapper here so that I can attach it to the getIdeaButton
 function getData() {
     getDinnerIdea();
 }
+// give functionality to the "view new recipe" button
 var getIdeaButton = document.getElementById("getIdea");
 getIdeaButton ? getIdeaButton.onclick = getData : console.log("no button");
+// start off the page with a new idea
 getData();

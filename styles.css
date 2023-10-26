@@ -1,9 +1,6 @@
-#mealPhoto {
-    border-radius: 100%;
-    text-align: center;
-    margin: auto;
-    width: 60%;
-    max-width: 200px;
+body {
+    width: 99%;
+    padding: 0 40px 20px;
 }
 
 .left {
@@ -11,21 +8,17 @@
     text-align: center;
 }
 
-#mealName, #video {
+#mealPhoto {
+    border-radius: 100%;
+    text-align: center;
+    margin: auto;
+    width: 60%;
+    max-width: 200px;
+    margin-bottom: 30px;
+}
+
+#video {
     margin: 40px 0;
-}
-
-#getIdea {
-    bottom: 0;
-    left: 0;
-}
-
-body {
-    padding: 0 40px 50px;
-}
-
-h4 {
-    padding: 50px 0 20px;
 }
 
 button {
@@ -35,7 +28,7 @@ button {
     border-radius: 15px;
     padding: 0 15px;
     border: 0; 
-    margin: 0 20px;
+    margin: 30px 20px 0;
 }
 
 button:hover {
@@ -43,7 +36,19 @@ button:hover {
     color: black;
 }
 
+h4 {
+    padding: 50px 0 20px;
+}
+
+.ingredient {
+    margin-left: 20px;
+    text-indent: -23px;
+    padding-left: 23px;
+    margin-right: -20px;
+}
+
 footer {
     text-align: center;
     padding-top: 50px;
+    font-size: 0.7em;
 }
