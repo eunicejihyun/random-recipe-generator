@@ -17,8 +17,18 @@
         <img id="mealPhoto"></img>
         <h1 id="mealName"></h1>
 
-        <a id="source" class="d-print-none" target="_blank" rel="noopener noreferrer"><button>view source</button></a>
-        <button id="getIdea" class="d-print-none">view new recipe</button>
+        <div class="buttons d-print-none">
+            <a id="source" target="_blank" rel="noopener noreferrer"><button>source</button></a>
+            <button id="getIdea">get a new recipe</button>
+
+            <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                aria-controls="offcanvasExample">
+                archive
+            </button>
+
+        </div>
+
+
 
         <iframe id="video" class="d-print-none" width="80%" height="40%" frameborder="0" allowfullscreen></iframe>
 
@@ -30,22 +40,34 @@
 
         <h4>Ingredients</h4>
         <div id="ingredientsList" class="row">
-            
+
         </div>
         <h4>Instructions</h4>
         <div id="instructions">
 
         </div>
 
-        
+
 
     </div>
 
+
+    <div class="offcanvas offcanvas-end d-print-none" tabindex="-1" id="offcanvasExample"
+        aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Archive</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" id="archive">
+        </div>
+    </div>
+
     <footer>
-        Code By Eunice | API from <a href="https://www.themealdb.com/api.php" target="_blank" rel="noopener noreferrer">here</a>
+        Code By Eunice | API from <a href="https://www.themealdb.com/api.php" target="_blank"
+            rel="noopener noreferrer">here</a>
     </footer>
 
-    
+
 
 
 

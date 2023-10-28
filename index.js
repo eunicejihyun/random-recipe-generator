@@ -42,10 +42,13 @@ var ingredientsList = document.getElementById("ingredientsList");
 var instructions = document.getElementById("instructions");
 var source = document.getElementById("source");
 var video = document.getElementById("video");
+var archive = document.getElementById("archive");
+// track current session's generated recipes
+var recipeCollection = {};
 // Get API data and update webpage
-function getDinnerIdea() {
+function getRecipe() {
     return __awaiter(this, void 0, void 0, function () {
-        var response, data;
+        var response, json, data;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, fetch(apiURL)];
@@ -53,25 +56,51 @@ function getDinnerIdea() {
                     response = _a.sent();
                     return [4 /*yield*/, response.json()];
                 case 2:
-                    data = _a.sent();
-                    console.log(data.meals[0]);
-                    updateWebpage(data.meals[0]);
+                    json = _a.sent();
+                    data = json.meals[0];
+                    // if this is a recipe that has already been generated, then get a different one
+                    if (data["idMeal"] in recipeCollection) {
+                        getRecipe();
+                    }
+                    else {
+                        console.log(data);
+                        addRecipeToCollection(data);
+                        updateWebpage(data);
+                    }
                     return [2 /*return*/];
             }
         });
     });
 }
+// update the webpage to display a recipe
 function updateWebpage(data) {
+    var _a, _b;
     mealName.textContent = data["strMeal"];
     mealPhoto.src = data["strMealThumb"];
     instructions.textContent = data["strInstructions"];
-    source.setAttribute("href", data["strSource"]);
+    // if there's a source link, then update the link - otherwise, remove the button from display
+    if (data["strSource"]) {
+        source.style.display = "inline";
+        source.setAttribute("href", data["strSource"]);
+    }
+    else {
+        source.style.display = "none";
+    }
+    // if there's a video, then update the link - otherwise, remove the video from display
+    if (data["strYoutube"]) {
+        video.style.display = "inline";
+        var videoID = data["strYoutube"].substring(data["strYoutube"].indexOf("v=") + 2);
+        video.src = "https://www.youtube.com/embed/" + videoID;
+    }
+    else {
+        video.style.display = "none";
+    }
     // update list of ingredients
     ingredientsList.innerHTML = "";
     for (var i = 1; i < 21; i++) {
         var ingredient = data["strIngredient".concat(i)];
         var measurement = data["strMeasure".concat(i)];
-        if (ingredient === null || ingredient !== "") {
+        if (ingredient) {
             var newIngredient = document.createElement("p");
             newIngredient.setAttribute("class", "ingredient col-sm-6 col-xl-4");
             var newIngredientText = document.createTextNode(" ".concat(measurement, " ").concat(ingredient));
@@ -82,21 +111,37 @@ function updateWebpage(data) {
             ingredientsList.appendChild(newIngredient);
         }
     }
-    // if there's a video, then update the link - otherwise, remove the video from display
-    if (data["strYoutube"].trim !== "") {
-        var videoID = data["strYoutube"].substring(data["strYoutube"].indexOf("v=") + 2);
-        video.src = "https://www.youtube.com/embed/" + videoID;
-    }
-    else {
-        video.style.display = "none";
-    }
+    var disabledButtons = document.getElementsByClassName("currentRecipe");
+    console.log(disabledButtons.length);
+    (_a = disabledButtons.item(0)) === null || _a === void 0 ? void 0 : _a.removeAttribute("disabled");
+    (_b = disabledButtons.item(0)) === null || _b === void 0 ? void 0 : _b.setAttribute("class", "archiveRecipe");
+    console.log(disabledButtons.length);
+    var thisRecipeButton = document.getElementById(data["idMeal"]);
+    thisRecipeButton.setAttribute("disabled", "");
+    thisRecipeButton.className = "currentRecipe";
 }
-// need to create a function wrapper here so that I can attach it to the getIdeaButton
+function addRecipeToCollection(recipe) {
+    // add recipe to temporary storage
+    recipeCollection[recipe["idMeal"]] = recipe;
+    // create a button for the new recipe in archive
+    var recipeButton = document.createElement("button");
+    recipeButton.setAttribute("class", "archiveRecipe");
+    recipeButton.setAttribute("type", "button");
+    recipeButton.textContent = recipe["strMeal"];
+    recipeButton.id = recipe["idMeal"];
+    recipeButton.addEventListener("click", showArchivedRecipe);
+    archive.appendChild(recipeButton);
+}
+function showArchivedRecipe() {
+    var recipeID = this.id;
+    updateWebpage(recipeCollection[recipeID]);
+}
+// need to create a function wrapper here so that I can attach it to the getRecipeButton
 function getData() {
-    getDinnerIdea();
+    getRecipe();
 }
-// give functionality to the "view new recipe" button
-var getIdeaButton = document.getElementById("getIdea");
-getIdeaButton ? getIdeaButton.onclick = getData : console.log("no button");
+// give functionality to the "get a new recipe" button
+var getRecipeButton = document.getElementById("getIdea");
+getRecipeButton.onclick = getData;
 // start off the page with a new idea
 getData();
